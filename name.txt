@@ -1,1 +1,2 @@
 DB_PASSWORD = dbpassord@1234
+account_password=password@1234
