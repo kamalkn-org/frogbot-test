@@ -1,19 +1,42 @@
-name: "Frogbot Scan Pull Request"
+name: "Frogbot Scan Repository"
 
 on:
-  pull_request_target:
-    types: [opened, synchronize]
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
 
 permissions:
   pull-requests: write
-  contents: read
+  contents: write
+  security-events: write
   id-token: write
 
 jobs:
-  scan-pull-request:
+  frogbot-scan:
     runs-on: ubuntu-latest
-    environment: frogbot
+    strategy:
+      matrix:
+        branch: ["main"]
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install python dependencies
+        run: pip install -r requirements.txt
+
       - uses: jfrog/frogbot@v3
         with:
           oidc-provider-name: kamal-github
@@ -21,4 +44,4 @@ jobs:
         env:
           JF_URL: https://hts2.jfrog.io
           JF_GIT_TOKEN: ${{ secrets.JF_GIT_TOKEN }}
-          JF_INSTALL_DEPS_CMD: "npm install"
+          JF_GIT_BASE_BRANCH: ${{ matrix.branch }}
