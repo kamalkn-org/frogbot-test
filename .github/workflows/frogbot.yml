@@ -5,14 +5,14 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 0 * * *"   # daily at midnight UTC
-  workflow_dispatch:       # manual trigger
+    - cron: "0 0 * * *"
+  workflow_dispatch:
 
 permissions:
   pull-requests: write
   contents: write
   security-events: write
-  id-token: write          # Mandatory for OIDC
+  id-token: write
 
 jobs:
   frogbot-scan:
@@ -21,6 +21,15 @@ jobs:
       matrix:
         branch: ["main"]
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
       - uses: jfrog/frogbot@v3
         with:
           oidc-provider-name: kamal-github
