@@ -1,0 +1,14 @@
+{
+  "name": "frogbot-test",
+  "version": "1.0.0",
+  "dependencies": {
+    "lodash": "4.17.15",
+    "axios": "0.21.1",
+    "minimist": "1.2.5",
+    "node-fetch": "2.6.1",
+    "ansi-regex": "3.0.0",
+    "path-parse": "1.0.6",
+    "glob-parent": "3.1.0",
+    "json5": "1.0.1"
+  }
+}
