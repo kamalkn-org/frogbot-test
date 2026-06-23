@@ -14,17 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: frogbot
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: npm install
-
       - uses: jfrog/frogbot@v3
         with:
           oidc-provider-name: kamal-github
@@ -32,3 +21,4 @@ jobs:
         env:
           JF_URL: https://hts2.jfrog.io
           JF_GIT_TOKEN: ${{ secrets.JF_GIT_TOKEN }}
+          JF_INSTALL_DEPS_CMD: "npm install"
