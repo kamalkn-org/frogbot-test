@@ -7,14 +7,24 @@ on:
 permissions:
   pull-requests: write
   contents: read
-  id-token: write          # Mandatory for OIDC
+  id-token: write
 
 jobs:
   scan-pull-request:
     runs-on: ubuntu-latest
-    # PR must be approved by a member of the "frogbot" GitHub environment
     environment: frogbot
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
       - uses: jfrog/frogbot@v3
         with:
           oidc-provider-name: kamal-github
